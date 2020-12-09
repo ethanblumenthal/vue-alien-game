@@ -47,20 +47,30 @@ export default createStore({
     ],
   },
   mutations: {
-    pickCharacter(state, character) {
-      state.character = character;
+    updateCharacter(state, choice) {
+      state.character = choice;
     },
-    updateUIState(state, uiState) {
-      state.uiState = uiState;
+    updateScore(state, amount) {
+      state.score = amount;
+    },
+    updateUIState(state, uistate) {
+      state.uiState = uistate;
     },
     pickQuestion(state, character) {
-      character === state.character ? (state.score = 13) : (state.score -= 13);
+      character === state.character ? (state.score += 13) : (state.score -= 13);
 
       if (state.questionIndex < state.questions.length - 1) {
         state.questionIndex++;
       } else {
-        Math.sign(state.score > 0 ? (uiState = "won") : (uiState = "lost"));
+        Math.sign(state.score) > 0
+          ? (state.uiState = "won")
+          : (state.uiState = "lost");
       }
+    },
+    restartGame(state) {
+      state.uiState = "start";
+      state.score = 0;
+      state.questionIndex = 0;
     },
   },
   actions: {},
