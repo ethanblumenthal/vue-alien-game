@@ -5,6 +5,8 @@ export default createStore({
     uiState: "start",
     characterChoices: ["baker", "mechanic", "artist"],
     character: "",
+    questionIndex: 0,
+    score: 0,
     questions: [
       {
         question: `What's your dog's name?`,
@@ -44,7 +46,14 @@ export default createStore({
       },
     ],
   },
-  mutations: {},
+  mutations: {
+    pickCharacter(state, character) {
+      state.character = character;
+    },
+    updateUIState(state, uiState) {
+      state.uiState = uiState;
+    },
+  },
   actions: {},
   modules: {},
 });

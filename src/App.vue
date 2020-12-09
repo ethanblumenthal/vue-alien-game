@@ -16,6 +16,8 @@
         />
         <label :for="option">{{ option }}</label>
       </p>
+
+      <button @click="pickCharacter">Pick your character!</button>
     </GameStateStart>
 
     <section v-else>
@@ -41,13 +43,17 @@
           </clipPath>
         </defs>
 
+        <Friend />
+        <Score />
+        <component :is="character"></component>
+
         <text
           x="1000"
           y="930"
           style="font: normal 45px 'Recursive; text-transform: uppercase;"
           class="text"
         >
-          Character Name
+          {{ character }}
         </text>
 
         <path fill="#f0959f" d="M0 842h657v192H0z" />
@@ -78,6 +84,18 @@
           />
         </g>
       </svg>
+
+      <div class="friendtalk">
+        <h3>{{ questions[questionIndex].question }}</h3>
+      </div>
+
+      <div class="zombietalk">
+        <p v-for="character in characterChoices" :key="character">
+          <button @click="pickQuestion(character)">
+            {{ questions[questionIndex][character] }}
+          </button>
+        </p>
+      </div>
     </section>
   </div>
 </template>
@@ -85,10 +103,22 @@
 <script>
 import { mapState } from "vuex";
 import GameStateStart from "@/components/GameStateStart.vue";
+import Artist from "@/components/Artist.vue";
+import Baker from "@/components/Baker.vue";
+import Friend from "@/components/Friend.vue";
+import Mechanic from "@/components/Mechanic.vue";
+import Score from "@/components/Score.vue";
+import Zombie from "@/components/Zombie.vue";
 
 export default {
   components: {
     GameStateStart,
+    Artist,
+    Baker,
+    Friend,
+    Mechanic,
+    Score,
+    Zombie,
   },
   data() {
     return {
@@ -96,7 +126,20 @@ export default {
     };
   },
   computed: {
-    ...mapState(["uiState", "questions", "characterChoices", "character"]),
+    ...mapState([
+      "uiState",
+      "questions",
+      "characterChoices",
+      "character",
+      "questionIndex",
+    ]),
+  },
+  methods: {
+    pickCharacter() {
+      this.$store.commit("pickCharacter", this.characterInput);
+      this.$store.commit("updateUIState", "characterChosen");
+    },
+    pickQuestion(character) {},
   },
 };
 </script>
